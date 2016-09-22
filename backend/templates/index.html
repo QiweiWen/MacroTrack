@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+  <span>Choose one:</span><br/>
+  {% for recipe in data.recipes %}
+    {{ recipe }}<br/>
+  {% endfor %}
+{% endblock content %}
