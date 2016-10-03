@@ -22,19 +22,24 @@ typedef struct baseline_predictor{
         void add_rating (int uid, int iid, int rating);         
         void delete_rating (int uid, int iid);
         void update_rating (int uid, int iid, int rating);
-        void update_predictor (void);
+        Floatvector& update_predictor (void);
     private:
-        
+		void _update_rating (int uid, int iid, int rating, int is_new); 	
+
         SpMat A;
         SpMat At;
         Floatvector C; 
-        
+		
+		Floatvector B_result;
+				
         std::map <int, zeroint_t> known_user;
         std::map <int, zeroint_t> known_items;
         
         std::map <int, int> b_user_row;
         std::map <int, int> b_item_row;
         
+		std::map <int, std::map<int, int>> c_rating_row;
+
         int b_row_count;
         int num_users;
         int num_items;
