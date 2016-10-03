@@ -6,11 +6,17 @@
 baseline_predictor::add_user (int uid){
         ++this->num_users;
         known_users [uid] = 1;
+        //TODO:
+        //1. add zero column to A
+        //2. record row number for user in b
 }
 
 baseline_predictor::add_item (int iid){
         ++this->num_items;
         known_items [iid] = 1;
+        //TODO:
+        //1. add zero columns to A
+        //2. record row number for item in b
 }
 
 baseline_predictor::add_rating (int uid, int iid, int ratings){
@@ -44,6 +50,10 @@ baseline_predictor::add_rating (int uid, int iid, int ratings){
                                 }
                                 C -= adjustment; 
                         }
+                        //add the new rating data to the vector C
                         C << (double)rating - average_rating;
+                        //TODO:
+                        //look up row number of item and user
+                        //add row in A 
                 }
 }
