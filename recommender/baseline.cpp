@@ -6,17 +6,36 @@
 baseline_predictor::add_user (int uid){
         ++this->num_users;
         known_users [uid] = 1;
-        //TODO:
         //1. add zero column to A
         //2. record row number for user in b
+        b_user_row [uid] = b_row_count++;
+        int rows = A.rows();
+        A.conservativeResize (m.rows(), m.cols() + 1);
+        if ( rows != 0){
+                VectorXf newcol;
+                for (int i = 0; i < rows; ++i){
+                        newcol << 0;
+                }
+                A.col (A.cols() - 1) = newcol;
+        }
 }
 
 baseline_predictor::add_item (int iid){
         ++this->num_items;
-        known_items [iid] = 1;
-        //TODO:
+        known_items [iid] = 1; 
         //1. add zero columns to A
         //2. record row number for item in b
+        b_item_row [uid] = b_row_count++;
+
+        int rows = A.rows();
+        A.conservativeResize (m.rows(), m.cols() + 1);
+        if ( rows != 0){
+                VectorXf newcol;
+                for (int i = 0; i < rows; ++i){
+                        newcol << 0;
+                }
+                A.col (A.cols() - 1) = newcol;
+        }
 }
 
 baseline_predictor::add_rating (int uid, int iid, int ratings){
@@ -54,6 +73,21 @@ baseline_predictor::add_rating (int uid, int iid, int ratings){
                         C << (double)rating - average_rating;
                         //TODO:
                         //look up row number of item and user
-                        //add row in A 
-                }
+                        //add row in A
+                        int userrow = b_user_row [uid];
+                        int itemrow = b_user_row [iid];
+                        
+                        //make a vector that is everywhere zero except 
+                        //at places corresponding to the parameters
+                        VectorXf newrow;
+                        for (int i = 0; i < A.cols(); ++i){
+                                if (i == userrow || i == itemrow){
+                                        newrow << 1;
+                                }else{
+                                        newrow << 0;
+                                }
+                        }
+                        A.conservativeResize (a.rows() + 1, a.cols());
+                        A. row (a.rows() - 1) = newrow;
+        }
 }

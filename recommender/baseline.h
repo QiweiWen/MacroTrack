@@ -8,7 +8,7 @@
 
 typedef Eigen::SparseMatrix<double> SpMat; 
 typedef Eigen::Triplet<double> T;
-typedef Eigen::VectorXf <int> Floatvector;
+typedef Eigen::VectorXf Floatvector;
 
 #define RATING_THRESHOLD 10
 
@@ -16,7 +16,7 @@ typedef struct baseline_predictor{
     public:
         baseline_predictor(int rows, int cols):
                 num_users(0), num_items(0), num_ratings (0), pending_updates(0),
-                average_rating(0){}
+                average_rating(0), b_row_count(0){}
         void add_user (int uid);
         void add_item (int iid);
         void add_rating (int uid, int iid, int rating);         
@@ -31,7 +31,11 @@ typedef struct baseline_predictor{
         
         std::map <int, zeroint_t> known_user;
         std::map <int, zeroint_t> known_items;
-
+        
+        std::map <int, int> b_user_row;
+        std::map <int, int> b_item_row;
+        
+        int b_row_count;
         int num_users;
         int num_items;
         int num_ratings;
