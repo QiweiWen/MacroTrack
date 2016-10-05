@@ -22,6 +22,8 @@ typedef struct sparse_wrapper{
         void add_non_zero (int row, int col, double val);
         void set_true_dimensions (int row, int col);
         void get_true_matrix (SpMat& res) const;
+        int true_rows(void){return _true_rows;}
+        int true_cols(void) {return _true_cols;}
     private:
         SpMat _matrix;
         int _true_rows;

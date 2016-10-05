@@ -5,6 +5,7 @@
 #include <vector>
 #include "zeroint.h"
 #include <map>
+#include "spmat.h" 
 
 typedef Eigen::SparseMatrix<double> SpMat; 
 typedef Eigen::Triplet<double> T;
@@ -16,7 +17,7 @@ typedef struct baseline_predictor{
     public:
         baseline_predictor(int rows, int cols):
                 num_users(0), num_items(0), num_ratings (0), pending_updates(0),
-                average_rating(0), b_row_count(0), old_avg(0){}
+                average_rating(0), b_row_count(0), old_avg(0), dirty_flag(0){}
         void add_user (int uid);
         void add_item (int iid);
         void add_rating (int uid, int iid, int rating);         
@@ -30,9 +31,13 @@ typedef struct baseline_predictor{
         Floatvector C; 
 		
 				
-        std::map <int, zeroint_t> known_user;
+        std::map <int, zeroint_t> known_users;
         std::map <int, zeroint_t> known_items;
-        
+       
+        std::map <int, int> b_user_row;
+        std::map <int, int> b_item_row; 
+ 		std::map <int, std::map<int, int> > c_rating_row;   
+        std::map <int, std::map <int, int> > rating_history;
         //the number of model parameters
         int b_row_count;
         int num_users;
@@ -44,6 +49,7 @@ typedef struct baseline_predictor{
         double average_rating;
         //last average used for vector C
         double old_avg;
+        bool dirty_flag;
 }baseline_t;
 
 #endif
