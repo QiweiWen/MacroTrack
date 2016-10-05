@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS= -O2 -Wall -c
+CFLAGS= -O2 -Wall -c -I/usr/include/eigen3
 LDFLAGS = -lm
 LD=$(CC)
 

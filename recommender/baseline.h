@@ -16,7 +16,7 @@ typedef struct baseline_predictor{
     public:
         baseline_predictor(int rows, int cols):
                 num_users(0), num_items(0), num_ratings (0), pending_updates(0),
-                average_rating(0), b_row_count(0){}
+                average_rating(0), b_row_count(0), old_avg(0){}
         void add_user (int uid);
         void add_item (int iid);
         void add_rating (int uid, int iid, int rating);         
@@ -26,26 +26,24 @@ typedef struct baseline_predictor{
     private:
 		void _update_rating (int uid, int iid, int rating, int is_new); 	
 
-        SpMat A;
-        SpMat At;
+        spwrapper_t A; 
         Floatvector C; 
 		
-		Floatvector B_result;
 				
         std::map <int, zeroint_t> known_user;
         std::map <int, zeroint_t> known_items;
         
-        std::map <int, int> b_user_row;
-        std::map <int, int> b_item_row;
-        
-		std::map <int, std::map<int, int>> c_rating_row;
-
+        //the number of model parameters
         int b_row_count;
         int num_users;
         int num_items;
+        //the row count for A and C
         int num_ratings;
         int pending_updates;  
+        //up to date running average
         double average_rating;
+        //last average used for vector C
+        double old_avg;
 }baseline_t;
 
 #endif
