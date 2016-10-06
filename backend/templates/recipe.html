@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row top-row">
+	  <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
+		<table class="table table-hover table-bordered">
+		  <thead>
+		    <tr>
+		      <th>#</th>
+		      <th>Name</th>
+		      <th>Sugar</th>
+		      <th>Fat</th>
+		      <th>Protein</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		      {% for ingredient in data.ingredients %}
+		      <tr>
+		      	<th scope="row">1</th>
+			    <td>{{ ingredient.name }}</td>
+			    <td>{{ ingredient.sugar }}</td>
+			    <td>{{ ingredient.fat }}</td>
+			    <td>{{ ingredient.protein }}</td>
+			</tr>
+			  {% endfor %}
+		  </tbody>
+		</table>
+	  </div>
+  </div>
+{% endblock content %}
