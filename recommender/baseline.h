@@ -29,7 +29,7 @@ typedef struct baseline_predictor{
 
         spwrapper_t A; 
         Floatvector C; 
-		
+	    Floatvector B_cached;	
 				
         std::map <int, zeroint_t> known_users;
         std::map <int, zeroint_t> known_items;
