@@ -23,7 +23,12 @@ public class Entrypoint {
 		// TODO Auto-generated method stub
 		try {
 			Recommender r = new Recommender ("test");
-			List <RecommendedItem> l = r.get_recommendations(2, 3);
+			r.update_rating(5, 10, 1.0);
+			r.update_rating(5, 11, 3.0);
+			r.update_rating(5, 15, 4.0);
+			r.update_rating(5, 16, 3.0);
+			r.update_rating(5, 17, 4.0);
+			List <RecommendedItem> l = r.get_recommendations(5, 3);
 			for (RecommendedItem item : l){
 				System.out.println(item);
 			}

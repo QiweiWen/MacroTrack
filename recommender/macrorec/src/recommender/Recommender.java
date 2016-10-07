@@ -74,9 +74,11 @@ public class Recommender {
 			 * add the new users
 			 */
 			for (Long uid : newusers){
-				List <numpair <Long,Double> > ratings = newuserratings.get(uid);
-				for (numpair<Long,Double> np: ratings){
-					String newline = String.format("%ld,%ld,%f", uid, np.a.longValue(), np.b.floatValue());
+				TreeSet <Long> rated_items = newuserratings.get(uid);
+				for (Long rated: rated_items){
+					float rating = newratings.get(new numpair <Long,Long> (uid, rated))
+							.floatValue();
+					String newline = String.format("%ld,%ld,%f", uid, rated, rating);
 					bw.write(newline);
 					bw.newLine();
 				}
@@ -94,10 +96,11 @@ public class Recommender {
 			 * might be faster just to make new ones
 			 * yay garbage collector
 			 */
-			tmpusers.clear();
+		
 			newusers.clear();
-			newuserratings = new TreeMap <Long, List <numpair <Long, Double>>> ();
+			newuserratings = new TreeMap <Long, TreeSet <Long>> ();
 			newratings = new TreeMap <numpair <Long, Long>, Double> ();
+			tmpmapping.clear();
 			/*
 			 * rename the files
 			 * make the new model
@@ -127,43 +130,61 @@ public class Recommender {
 		newratings.put(p, rating);
 		//can use binary search because knownusers was populated in order
 		if (java.util.Collections.binarySearch(knownusers,uid) < 0){
-			newusers.add(uid);
-			List <numpair<Long,Double>> l = newuserratings.get(uid);
+			if (!newusers.contains(uid)){
+				newusers.add(uid);
+			}
+			
+			TreeSet <Long> l = newuserratings.get(uid);
 			if (l == null){
-				newuserratings.put(uid, new LinkedList <numpair<Long,Double>> ());
+				newuserratings.put(uid, new TreeSet <Long> ());
 				l = newuserratings.get(uid);
 			}
-			l.add(new numpair<Long,Double> (iid, rating));
+			if (! l.contains(iid)){
+				l.add(iid);
+			}
 		}
 	
 	}
 	
-	public List <RecommendedItem> get_recommendations (int user, int num) throws TasteException, IOException{
-		 if (newusers.contains(user) && !tmpusers.contains(user)){
+	public List <RecommendedItem> get_recommendations (long user, int num) throws TasteException, IOException{
+	
+	
+		 if (newusers.contains(user) && !tmpmapping.containsKey(user)){
 			 Long tempUserId = model.takeAvailableUser();
-			 List <numpair<Long,Double>> l = newuserratings.get(user);
+			
+			 tmpmapping.put(user, tempUserId);
+			 TreeSet <Long> l = newuserratings.get(user);
 			 GenericUserPreferenceArray g = 
 					 new GenericUserPreferenceArray(l.size());
 			 g.setUserID(0, tempUserId);
 			 int i = 0;
-			 for (numpair<Long,Double> np: l){
-				 g.setItemID(i, np.a);
-				 g.setValue(i, np.b.floatValue());
+			 for (Long rated: l){
+				 float rating = newratings.get(new numpair<Long,Long> (new Long (user),rated)).floatValue();
+				
+				 g.setItemID(i, rated);
+				 g.setValue(i, rating);
+				 i++;
 			 }
-			 model.setTempPrefs(g, tempUserId);
-			 tmpusers.add(tempUserId);
+			 System.out.println (g.toString());
+			 model.setTempPrefs(g,tempUserId);
+			
 			 List <RecommendedItem> res;
-			 if (tmpusers.size() == max_newusers){
+			 if (tmpmapping.size() == max_newusers){
 				 switch_model();
 				 res = recommender.recommend(user, num);
 			 }else{
 				 res = recommender.recommend(tempUserId, num);
+				 System.out.println (res.size());
 			 }
+			 
 			// model.releaseUser(tempUserId);
 			
 			 return res;
 		 }else{
-			 return recommender.recommend(user, num);
+			 if (tmpmapping.containsKey(user)){
+				 return recommender.recommend(tmpmapping.get(user), num);
+			 }else
+				 return recommender.recommend(user, num);
 		 }
 	}
 	
@@ -173,14 +194,16 @@ public class Recommender {
 	private ArrayList <Long> knownusers = new ArrayList<Long> ();
 	//users to be added to the next data model
 	private LinkedList <Long> newusers = new LinkedList <Long> ();
-	//temporary users 
-	private LinkedList <Long> tmpusers = new LinkedList <Long> ();
+
 	//(user,item) -> rating
 	private TreeMap <numpair <Long, Long>, Double> newratings =
 			new TreeMap <numpair <Long, Long>, Double> ();
 	//user -> [(item, rating)]
-	private TreeMap <Long, List <numpair <Long, Double>> > newuserratings = 
-			new TreeMap <Long, List <numpair <Long, Double>>> ();
+	private TreeMap <Long, TreeSet <Long> >  newuserratings = 
+			new TreeMap <Long, TreeSet <Long> > ();
+	//user->tmpuser
+    private TreeMap <Long,Long> tmpmapping =
+    		new TreeMap <Long,Long> ();
 	
 	private PlusAnonymousConcurrentUserDataModel model;
 	private UserSimilarity similarity;
