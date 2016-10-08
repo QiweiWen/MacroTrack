@@ -23,14 +23,20 @@ public class Entrypoint {
 		// TODO Auto-generated method stub
 		try {
 			Recommender r = new Recommender ("test");
-			r.update_rating(5, 10, 1.0);
-			r.update_rating(5, 11, 3.0);
-			r.update_rating(5, 15, 4.0);
-			r.update_rating(5, 16, 3.0);
-			r.update_rating(5, 17, 4.0);
-			List <RecommendedItem> l = r.get_recommendations(5, 3);
-			for (RecommendedItem item : l){
-				System.out.println(item);
+
+			for (int j = 0; j < 3; ++j){
+				r.update_rating(7 - j, 10, 1.0);
+				r.update_rating(7 - j, 11, 3.0);
+				r.update_rating(7 - j, 15, 4.0);
+				r.update_rating(7 - j, 16, 3.0);
+				r.update_rating(7 - j, 17, 4.0);
+			}
+			r.get_recommendations(6, 3);
+			r.get_recommendations(7, 3);
+			
+			List <RecommendedItem> l =  r.get_recommendations(6, 3);
+			for (RecommendedItem recom: l){
+				System.out.println (recom);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
