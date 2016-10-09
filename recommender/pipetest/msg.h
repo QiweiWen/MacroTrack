@@ -24,38 +24,57 @@ typedef struct{
 }recom_t;
 
 static inline int put_command 
-(FILE* ctl, FILE* sta, FILE* res,msg_t* msg, recom_t** ret)
+(FILE* ctl, FILE* sta, FILE* res,msg_t* msg, recom_t** ret, int* numitems)
 {
-	char stackbuf [20];
+	char stackbuf [100] = {0};
+ 
 	switch (msg->argnum){
 		case 0:
 		{sprintf (stackbuf, "%d\n", msg->opcode);break;}
 		case 2:
-		{sprintf (stackbuf, "%d, %ld, %ld\n",msg->opcode, msg->arg1, msg->arg2);break;}
+		{sprintf (stackbuf, "%d,%ld,%ld\n",msg->opcode, msg->arg1, msg->arg2);break;}
 		case 3:
-		{sprintf (stackbuf, "%d, %ld, %ld, %f\n",msg->opcode, msg->arg1, msg->arg2,msg->arg3);break;}
+		{sprintf (stackbuf, "%d,%ld,%ld,%f\n",msg->opcode, msg->arg1, msg->arg2,msg->arg3);break;}
 		default: break;
 	}
-	fputs (stackbuf, ctl);
+    
+
+   
+    int written =  write (fileno (ctl), stackbuf, strlen (stackbuf));
+    if (written < 0){
+        printf ("%s\n", strerror (errno));
+        exit (-1);
+    }
 	int status_code;
-	if (!fgets (stackbuf, 20, sta)) goto err;
+    fgets (stackbuf, 5, sta); 
 	sscanf (stackbuf, "%d", &status_code);
-	if (status_code) goto err;
+	if (status_code) {
+         
+        fprintf (stderr, "bad status from recommender %d\n", status_code);
+        goto err;
+    }
 	//collect result
 	recom_t* inarr;
 	if (msg->opcode == RECOM_CODE){
 		inarr = malloc (sizeof (recom_t) * msg->arg2);
 		int i = 0;
-		while (fgets (stackbuf,20, res)){
+		while (1){
+
+            char* crap = fgets (stackbuf, 100, res);
+            if (!crap) break;
 			long iid;
 			float rating;
 			if (sscanf(stackbuf, "%ld,%f", &iid, &rating) != 2){
 				goto free_arr;
 			}
 			inarr[i++] = (recom_t){.iid = iid, .rating = rating};
+            printf ("%ld, %f\n", iid, rating);
 		}
 		*ret = inarr;
-	}
+        *numitems = i; 
+	}else if (msg->opcode == EXT_CODE){
+        exit(0);
+    }
 	return 0;	
 free_arr:
 	free (inarr); 

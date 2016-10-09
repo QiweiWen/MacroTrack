@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 
+import MessageThread.MessageHandler;
+
 import recommender.Recommender;
 
 
@@ -14,13 +16,13 @@ public class Entrypoint {
 	 * @param args
 	 */
 	public static void main(String[] args)  {
-		/*
-		if (args.length != 2){
-			System.err.print("Usage: infile ofile");
+		
+		if (args.length != 3){
+			System.err.print("Usage: java app control_pipe status_pipe result_pipe");
 			System.exit(1);
 		}
-		*/
-		// TODO Auto-generated method stub
+		
+		/*
 		try {
 			Recommender r = new Recommender ("test");
 
@@ -42,6 +44,24 @@ public class Entrypoint {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TasteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+		
+		try {
+			Recommender r;
+			r = new Recommender ("test");
+			MessageHandler m = new MessageHandler (args[0], args[1], args[2],r);
+			m.start();
+			m.join();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TasteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
