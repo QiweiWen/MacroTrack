@@ -23,7 +23,7 @@ public class Recommender {
 	 * Save updates to newmodelfile, build new model when asked
 	 */
 	public Recommender(String modelfile) throws IOException, TasteException{
-		model = new PlusAnonymousConcurrentUserDataModel(new FileDataModel (new File(modelfile)), 100);
+		model = new PlusAnonymousConcurrentUserDataModel(new FileDataModel (new File(modelfile)), max_newusers);
 		similarity = new PearsonCorrelationSimilarity(model);
 		neighbourhood = new ThresholdUserNeighborhood(0.1, similarity, model);
 		recommender = new GenericUserBasedRecommender(model, neighbourhood, similarity);
@@ -55,13 +55,14 @@ public class Recommender {
 			 *  insert the modified entries
 			 */
 			while ((oldline = br.readLine()) != null){
+				if (oldline.length() == 0) continue;
 				String[] nums = oldline.split(",");
 				long uid = Long.parseLong(nums[0]);
 				long iid = Long.parseLong(nums[1]);
 				//has this rating been updated since?
 				numpair <Long, Long> lp = new numpair <Long, Long> (uid, iid);
 				if (newratings.containsKey(lp)){
-					String newline = String.format("%ld,%ld,%f",uid,iid, newratings.get(lp).floatValue());
+					String newline = String.format("%d,%d,%f",uid,iid, newratings.get(lp).floatValue());
 					bw.write(newline);
 					bw.newLine();
 				}else{
@@ -78,7 +79,7 @@ public class Recommender {
 				for (Long rated: rated_items){
 					float rating = newratings.get(new numpair <Long,Long> (uid, rated))
 							.floatValue();
-					String newline = String.format("%ld,%ld,%f", uid, rated, rating);
+					String newline = String.format("%d,%d,%f", uid, rated, rating);
 					bw.write(newline);
 					bw.newLine();
 				}
@@ -90,6 +91,7 @@ public class Recommender {
 			    	System.exit(1);
 			    }
 			}
+			System.out.println (knownusers);
 			bw.close();
 			/*
 			 * clear the data structures
@@ -101,7 +103,14 @@ public class Recommender {
 			newuserratings = new TreeMap <Long, TreeSet <Long>> ();
 			newratings = new TreeMap <numpair <Long, Long>, Double> ();
 			tmpmapping.clear();
-			/*
+			/*for (RecommendedItem item : l){
+				System.out.println(item);
+			}
+			r.switch_model();
+			r.get_recommendations(5, 3);
+			for (RecommendedItem item : l){
+				System.out.println(item);
+			}
 			 * rename the files
 			 * make the new model
 			 */
@@ -110,12 +119,16 @@ public class Recommender {
 				oldf.delete();
 				File newf = new File (newmodelfile);
 				newf.renameTo(oldf);
-				model = new PlusAnonymousConcurrentUserDataModel(new FileDataModel(newf),100);
+				model = new PlusAnonymousConcurrentUserDataModel(new FileDataModel(oldf),max_newusers);
 				similarity = new PearsonCorrelationSimilarity(model);
 				neighbourhood = new ThresholdUserNeighborhood(0.1, similarity, model);
 				recommender = new GenericUserBasedRecommender(model, neighbourhood, similarity);
-			}catch (Exception e){
+			}catch (IOException e){
 				System.err.println("error moving model files");
+				System.err.println(e.getMessage());
+				System.exit(1);
+			} catch (TasteException e) {
+				e.printStackTrace();
 				System.exit(1);
 			}
 			
@@ -165,16 +178,18 @@ public class Recommender {
 				 g.setValue(i, rating);
 				 i++;
 			 }
-			 System.out.println (g.toString());
+			// System.out.println (g.toString());
 			 model.setTempPrefs(g,tempUserId);
 			
 			 List <RecommendedItem> res;
+			// System.out.println (tmpmapping.size() + "," + max_newusers);
 			 if (tmpmapping.size() == max_newusers){
+				 
 				 switch_model();
 				 res = recommender.recommend(user, num);
 			 }else{
 				 res = recommender.recommend(tempUserId, num);
-				 System.out.println (res.size());
+				// System.out.println (res.size());
 			 }
 			 
 			// model.releaseUser(tempUserId);
