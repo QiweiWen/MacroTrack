@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "field_helper.html" import render_field %}
+<div class="row top-row">
+  <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2" style="text-align:center">
+    <form method=post action="/register">
+      <dl>
+        {{ render_field(data.form.username) }}
+        {{ render_field(data.form.email) }}
+        {{ render_field(data.form.password) }}
+        {{ render_field(data.form.confirm) }}
+        {{ render_field(data.form.accept_tos) }}
+      </dl>
+      <p><input type=submit value=Register>
+    </form>
+  </div>
+</div>
+{% endblock content %}
