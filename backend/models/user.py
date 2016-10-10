@@ -6,11 +6,6 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 import config, hashlib
 
 class User(BaseModel, UserMixin):
-  
-  def get_user(self, id):
-    sql_command = "FROM Users SELECT * WHERE id=" + str(id)
-    print sql_command
-    return self.execute_and_fetch_one(sql_command)
 
   def check_auth(self, email, token):
     sql_command = "SELECT id FROM Users WHERE email=\'" + email + "\' AND pwrd=\'" + token + "'"
