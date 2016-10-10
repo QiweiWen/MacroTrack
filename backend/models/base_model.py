@@ -27,8 +27,8 @@ class BaseModel():
 		return cur.fetchone()
 
 	def execute_sql_list(self, command):
-		result = self.execute_sql(command)
-		if result:
-			return result.fetchmany()
-		else:
-			return []
+		cur = self.db_conn.cursor()
+		print "Executing", command
+		result = cur.execute(command)
+		self.db_conn.commit()
+		return cur.fetchall()

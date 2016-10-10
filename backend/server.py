@@ -3,6 +3,7 @@ from flask_login import LoginManager
 
 from controllers.homepage_controller import HomePageController
 from controllers.recipe_controller import RecipeController
+from controllers.recipes_controller import RecipesController
 from controllers.user_registration_controller import UserRegistrationController
 from controllers.login_controller import LoginController
 from controllers.dash_controller import DashController
@@ -42,9 +43,11 @@ def add_route(route_path, route_controller, methods):
 
 add_route("/", HomePageController, ["GET"])
 add_route("/recipe/<recipe_id>", RecipeController, ["GET"])
+add_route("/recipes", RecipesController, ["GET"])
 add_route("/new/user", UserRegistrationController, ["GET"])
 add_route("/register", UserRegistrationController, ["POST"])
 add_route("/login", LoginController, ["GET", "POST"])
+# add_route("/login", LoginController, ["GET"])
 add_route("/dash", DashController, ["GET", "POST"])
 
 

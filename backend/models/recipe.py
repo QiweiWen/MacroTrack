@@ -6,23 +6,27 @@ class Recipe(BaseModel):
 	# 	pass
 
 	def get_ingredients(self, recipe):
-		# sql_command = "SELECT name from Ingredients LEFT JOIN (SELECT ingredient FROM Contains WHERE recipe='0') AS recipe ON recipe.ingredient = ingredients.id"
-		# results = self.execute_sql_list(sql_command)
-		return [{
-			"name": "Cheese, mozzarella, buffalo",
-			"sugar": 1318,
-			"protein": 0.3,
-			"fat": 17.2
-		}, {
-			"name": "Flour, wheat, white, high protein or bread making flour",
-			"sugar": 1492,
-			"protein": 0.1,
-			"fat": 11.3
-		}]
+		sql_command = "SELECT name, sugar, protein, fat from Ingredients JOIN (SELECT ingredient FROM Contains WHERE recipe='{}') AS recipe ON recipe.ingredient = ingredients.id".format(recipe)
+		results = self.execute_sql_list(sql_command)
+		result_dict = []
+		for result in results:
+			result_dict.append({
+				  "name": result[0],
+				  "sugar": result[1],
+				  "protein": result[2],
+				  "fat": result[3],
+				})
+		return result_dict
 
 	def get_popular_recipes(self, num_results=20):
 		highest_rated = self.get_highest_rated()
 		return highest_rated
+
+	def get_random_recipes(self, num_results=10):
+		sql_command = "SELECT name, id FROM Recipes ORDER BY RANDOM() LIMIT 10"
+		results = self.execute_sql_list(sql_command)
+		print results
+		return results
 
 	def get_highest_rated(self, num_results=20):
 		# TODO: Fill in connection to DB through base class.
