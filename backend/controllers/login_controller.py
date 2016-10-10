@@ -32,7 +32,6 @@ class LoginController(BaseController):
         return response
     return redirect("/login", code=302)
 
-
   def get(self):
     data = {
       "form": self.RegisterForm()

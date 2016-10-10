@@ -30,7 +30,7 @@ class Recipe(BaseModel):
 
 	def get_highest_rated(self, num_results=20):
 		# TODO: Fill in connection to DB through base class.
-		sql_command = "SELECT name, id from RECIPES LEFT JOIN (SELECT ratings.recipe, AVG(ratings.rating) as AverageRating FROM Ratings LEFT JOIN Recipes ON ratings.recipe=recipes.id GROUP BY ratings.recipe) as Rankings ON Rankings.recipe = recipes.id"
+		sql_command = "SELECT name, id from RECIPES LEFT JOIN (SELECT ratings.recipe, AVG(ratings.rating) as AverageRating FROM Ratings LEFT JOIN Recipes ON ratings.recipe=recipes.id GROUP BY ratings.recipe) as Rankings ON Rankings.recipe = recipes.id LIMIT " + str(num_results)
 		results = self.execute_sql_list(sql_command)
 		result_dict = {}
 		result_list = []

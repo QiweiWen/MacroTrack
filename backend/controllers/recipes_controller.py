@@ -13,8 +13,10 @@ class RecipesController(BaseController):
 
   @BaseController.requires_auth
   def get(self):
+    
     data = {
       "recipes": Recipe().get_random_recipes()
     }
+
     print data
     return render_template("recipes.html", data=data)

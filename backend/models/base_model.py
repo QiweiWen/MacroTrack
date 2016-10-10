@@ -4,7 +4,6 @@ import getpass
 class BaseModel():
 
 	def __init__(self):
-		# Create connection to the postgres db (library?)
 		
 		# Get name of user from kernel.
 		self.sys_username = getpass.getuser()
