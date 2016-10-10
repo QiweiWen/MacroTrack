@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -O2 -Wall -c -std=gnu99
+CFLAGS= -O2 -Wall -c -std=gnu99 -g3
 LDFLAGS = -lm
 LD=$(CC)
 

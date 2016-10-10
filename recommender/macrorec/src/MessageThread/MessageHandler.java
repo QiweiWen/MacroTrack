@@ -9,7 +9,7 @@ import java.util.*;
 
 public class MessageHandler implements Runnable {
 
-	public MessageHandler (String stpipe, String cmdpipe, 
+	public MessageHandler (String cmdpipe, String stpipe, 
 						String resultpipe, Recommender r) throws FileNotFoundException{
 		this.stpipe = new RandomAccessFile (stpipe,"rw");
 		this.cmdpipe = new RandomAccessFile (cmdpipe, "rw");

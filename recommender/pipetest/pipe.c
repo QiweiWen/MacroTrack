@@ -72,6 +72,7 @@ int main (int argc,char** argv){
             
 		}else{
 			fprintf(stderr, "UNKNOWN OPCODE %s\n", stackbuf);
+                        continue;
 		}	
 		recom_t* res = NULL;
         int num_items = 0;

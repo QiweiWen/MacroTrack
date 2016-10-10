@@ -17,8 +17,8 @@ public class Entrypoint {
 	 */
 	public static void main(String[] args)  {
 		
-		if (args.length != 3){
-			System.err.print("Usage: java app control_pipe status_pipe result_pipe");
+		if (args.length != 4){
+			System.err.print("Usage: java app control_pipe status_pipe result_pipe initmod");
 			System.exit(1);
 		}
 		
@@ -51,7 +51,7 @@ public class Entrypoint {
 		
 		try {
 			Recommender r;
-			r = new Recommender ("test");
+			r = new Recommender (args[3]);
 			MessageHandler m = new MessageHandler (args[0], args[1], args[2],r);
 			m.start();
 			m.join();
