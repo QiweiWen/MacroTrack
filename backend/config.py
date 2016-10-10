@@ -1,5 +1,5 @@
 
-
+SALT = "thisisbadpractice"
 
 RDI_PROTEIN = 60
 

@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, redirect
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
 from base_controller import BaseController
@@ -25,7 +25,7 @@ class UserRegistrationController(BaseController):
 
   def post(self):
     result = User().new_user(request.form)
-    return result#redirect("/dash", code=302)
+    return redirect("/login", code=302)
 
   def get(self):
   	data = {

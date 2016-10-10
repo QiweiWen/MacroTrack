@@ -14,11 +14,21 @@ class BaseModel():
 
 	def execute_sql(self, command):
 		cur = self.db_conn.cursor()
-		cur.execute(command)
-		
-		return cur
+		print "Executing", command
+		result = cur.execute(command)
+		self.db_conn.commit()
+		return result
+
+	def execute_and_fetch_one(self, command):
+		cur = self.db_conn.cursor()
+		print "Executing", command
+		result = cur.execute(command)
+		self.db_conn.commit()
+		return cur.fetchone()
 
 	def execute_sql_list(self, command):
 		result = self.execute_sql(command)
-		
-		return result.fetchmany()
+		if result:
+			return result.fetchmany()
+		else:
+			return []
