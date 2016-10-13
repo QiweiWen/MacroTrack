@@ -121,22 +121,22 @@ int main (int argc, char** argv){
         std::cin >> grammes;
         grammes /= (double)100;
         fprintf (ofile, cont_fmt, rid, igr_id, grammes); 
-        printf ("enter a description on how to make the recipe\n");
-        
-        int pid = fork();
-        if (pid){
-            //parent
-            int retstat;
-            waitpid (pid, &retstat, 0);
-        }else{
-            //child
-            
-            char* ifname_cchararr = (char*)malloc(ifname.length() + 1);
-            strcpy (ifname_cchararr, ifname.c_str());
-            char* const aargv[3] = {"vim", ifname_cchararr, NULL};
-           // std::cout << ifname_cchararr<<std::endl;
-            execvp ("vim", aargv);
-        }
-
    }
+    printf ("enter a description on how to make the recipe\n");
+    
+    int pid = fork();
+    if (pid){
+        //parent
+        int retstat;
+        waitpid (pid, &retstat, 0);
+    }else{
+        //child
+        
+        char* ifname_cchararr = (char*)malloc(ifname.length() + 1);
+        strcpy (ifname_cchararr, ifname.c_str());
+        char* const aargv[3] = {"vim", ifname_cchararr, NULL};
+       // std::cout << ifname_cchararr<<std::endl;
+        execvp ("vim", aargv);
+    }
+
 }
