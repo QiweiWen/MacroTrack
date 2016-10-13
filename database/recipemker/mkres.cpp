@@ -8,18 +8,20 @@
 #include <string.h>
 #include <fstream>
 #include <limits>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #define errprint(...) {fprintf (stderr, __VA_ARGS__);}
 
 int chomp (std::string & twat){ 
-    int wspace_begin;
+    size_t wspace_begin;
     for (wspace_begin = 0; wspace_begin< twat.length(); ++wspace_begin){
         if (!isspace(twat[wspace_begin])){
             break;
         }
     }
     if (wspace_begin == twat.length()) return -1;
-    int wspace_end;
+    size_t wspace_end;
     for (wspace_end = twat.length() - 1; wspace_end >= 0; --wspace_end){
         if (!isspace  (twat [wspace_end])){
             break;
@@ -54,10 +56,6 @@ int main (int argc, char** argv){
         exit (1);
     }
     
-	char stackbufarr[200];
-	char* stackbuf = stackbufarr;
-	char opcode [5];
-	opcode [5] = 0;
     PGconn* conn;
     FILE* ofile = fopen (argv[1], "w");
         
@@ -65,7 +63,7 @@ int main (int argc, char** argv){
         errprint ("error connecting to db");
         exit (1);
     }
-	int consumed;
+	
     std::string recname;
     printf ("enter the name of the recipe\n");
     std::cin >> recname;
@@ -93,7 +91,7 @@ int main (int argc, char** argv){
         if (ingredient_regex == "nomore"){
             break;
         }
-        int len = ingredient_regex.length();
+
         std::string ingr_query = ingr_query_base + '\'' + ingredient_regex + '\'';
         assert (rs = dbexec (conn, ingr_query));
         if (!PQntuples(rs)){
@@ -123,5 +121,22 @@ int main (int argc, char** argv){
         std::cin >> grammes;
         grammes /= (double)100;
         fprintf (ofile, cont_fmt, rid, igr_id, grammes); 
+        printf ("enter a description on how to make the recipe\n");
+        
+        int pid = fork();
+        if (pid){
+            //parent
+            int retstat;
+            waitpid (pid, &retstat, 0);
+        }else{
+            //child
+            
+            char* ifname_cchararr = (char*)malloc(ifname.length() + 1);
+            strcpy (ifname_cchararr, ifname.c_str());
+            char* const aargv[3] = {"vim", ifname_cchararr, NULL};
+           // std::cout << ifname_cchararr<<std::endl;
+            execvp ("vim", aargv);
+        }
+
    }
 }
