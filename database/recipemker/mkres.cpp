@@ -66,7 +66,7 @@ int main (int argc, char** argv){
 	
     std::string recname;
     printf ("enter the name of the recipe\n");
-    std::cin >> recname;
+    std::getline (std::cin,recname);
     chomp (recname);
     std::string ingr_query_base
         ("select * from ingredients where name ~ ");
