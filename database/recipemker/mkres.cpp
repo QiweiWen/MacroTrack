@@ -105,15 +105,20 @@ int main (int argc, char** argv){
            printf ("%s\n", PQgetvalue(rs, i, 1)); 
         }
         int sel = 0;
+        int skipflag = 0;
         for (;;){
             if (!(std::cin >> sel)){
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 errprint ("invalid selection, enter a number between %d and %d\n",0,i - 1);
-            }else if (sel < 0 || sel >= i){ 
+            }else if ((sel < 0 || sel >= i )&& sel != -1){ 
                 errprint ("invalid selection, enter a number between %d and %d\n",0,i - 1);
+            }else if (sel == -1){
+                skipflag = 1;
+                break;
             }else break;
         }
+        if (skipflag) continue;
         int igr_id = atoi (PQgetvalue (rs, sel, 0)); 
         //printf ("%d\n", igr_id);
         printf ("enter the amount of the ingredient in grammes\n");
