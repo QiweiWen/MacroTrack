@@ -18,9 +18,30 @@ class Recipe(BaseModel):
 				})
 		return result_dict
 
+	def get_id_from_name_and_author(self, name, author):
+		sql_command = "SELECT id FROM Recipes WHERE name='{}' AND author='{}'".format(name, str(author))
+		recipe_id = self.execute_and_fetch_one(sql_command)[0]
+		return recipe_id
+
+	def new_recipe(self, name, ingredients, author):
+		sql_command = "INSERT INTO Recipes (name, author, instruction_file) VALUES ('{}', '{}', '')".format(name, str(author))
+		self.execute_sql(sql_command)
+		recipe_id = self.get_id_from_name_and_author(name, author)
+		# self.execute_sql(sql_command)
+		for ingredient in ingredients:
+			sql_command = "INSERT INTO Contains (recipe, ingredient, amount, unit) VALUES ('{}', '{}', '{}', '1')".format(recipe_id, ingredient[0], ingredient[1])
+			self.execute_sql(sql_command)
+
+
 	def get_popular_recipes(self, num_results=20):
 		highest_rated = self.get_highest_rated()
 		return highest_rated
+
+	def get_all_ingredients(self):
+		sql_command = "SELECT name, id FROM Ingredients"
+		results = self.execute_sql_list(sql_command)
+
+		return results
 
 	def get_random_recipes(self, num_results=10):
 		sql_command = "SELECT name, id FROM Recipes ORDER BY RANDOM() LIMIT 10"

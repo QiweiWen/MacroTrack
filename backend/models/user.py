@@ -20,6 +20,10 @@ class User(BaseModel, UserMixin):
     print sql_command
     return self.execute_and_fetch_one(sql_command)
 
+  def id_from_email(self, email):
+    sql_command = "SELECT id FROM Users WHERE email='{}'".format(email)
+    return self.execute_and_fetch_one(sql_command)[0]
+
   def new_user(self, new_user_params):
     pass_hash = User.hash_password(new_user_params["password"])
     sql_command = "INSERT INTO Users (name, pwrd, email) VALUES (\'"+new_user_params["username"]+"\', \'"+pass_hash+"\', \'"+new_user_params["email"]+"\')"

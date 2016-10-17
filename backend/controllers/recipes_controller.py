@@ -15,7 +15,8 @@ class RecipesController(BaseController):
   def get(self):
     
     data = {
-      "recipes": Recipe().get_random_recipes()
+      "recipes": Recipe().get_random_recipes(),
+      "logged_in": request.user_id
     }
 
     print data

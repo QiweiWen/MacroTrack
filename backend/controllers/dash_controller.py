@@ -10,6 +10,8 @@ import config
 
 class DashController(BaseController):
 
+  decorators = [BaseController.requires_auth]
+
   def __init__(self):
     self.user = User()
 
@@ -22,9 +24,10 @@ class DashController(BaseController):
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
     password = PasswordField('New Password', [validators.DataRequired()])
 
-  @BaseController.requires_auth
+  # @BaseController.requires_auth
   def get(self):
     data = {
-      "form": self.RegisterForm()
+      "form": self.RegisterForm(),
+      "logged_in": True
     }
     return render_template("dash.html", data=data)

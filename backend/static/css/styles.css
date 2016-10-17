@@ -21,6 +21,11 @@ body {
     webkit-tap-highlight-color: #222;
 }
 
+/*.generic-table {
+    background-color: #fff;
+    color: #000;
+}*/
+
 hr {
     max-width: 80px;
     border-width: 3px;

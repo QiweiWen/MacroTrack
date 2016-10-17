@@ -9,7 +9,8 @@ class HomePageController(BaseController):
   def get(self):
   	data = {
   	  # list of dicts with keys: recipe name, recipe id
-  	  "recipes": Recipe().get_popular_recipes()
+  	  "recipes": Recipe().get_popular_recipes(),
+      "logged_in": self.is_logged_in()
   	}
 
   	return render_template("index.html", data=data)
