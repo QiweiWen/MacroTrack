@@ -33,7 +33,7 @@ class BaseController(MethodView):
     email = request.cookies.get("email", "")
     potential_user_id = User().check_auth(email, auth)
 
-    return potential_user_id
+    return potential_user_id[0]
 
   def get():
     return "404 not found."

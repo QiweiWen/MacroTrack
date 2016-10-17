@@ -30,20 +30,23 @@
             <th>Name</th>
             <th>Link</th>
             <th>Rate It!</th>
+            <th>Add to Plan</th>
           </tr>
         </thead>
         <tbody>
             {% for recipe in data.recipes %}
             <tr>
-                <td>{{recipe.0}}</td>
+                <td>{{ recipe.0 }}</td>
                 <td><a href="/recipe/{{recipe.1}}">Link</a></td>
                 <td class="rating-container recipe-{{recipe.1}}">
-                  <span class="star score-5">☆</span>
-                  <span class="star score-4">☆</span>
-                  <span class="star score-3">☆</span>
-                  <span class="star score-2">☆</span>
-                  <span class="star score-1">☆</span>
+                  {% for n in range(5, recipe.2, -1) %}
+                    <span class="star score-{{ n }}">☆</span>
+                  {% endfor %}
+                  {% for n in range(recipe.2, 0, -1) %}
+                    <span class="star score-{{ n }}">★</span>
+                  {% endfor %}
                 </td>
+                <td><a href="/add/meal/{{recipe.1}}">Add</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -52,24 +55,30 @@
   </div>
 
   <script>
+
+    for (ele in $("rating-container")) {
+
+    }
+
     $(".star").click(function(){
       var parent = $($(this).parent());
-      var recipeId = parent[0].className.replace("rating-container recipe-", "")
+      var recipeId = parent[0].className.replace("sorting_1", "").replace("rating-container", "").replace("recipe-", "").replace("clicked", "").replace(" ", "");
+
       for (var i = 1; i <= 5; i++) {
         $(".score-" + i, parent)[0].innerHTML = "\u2606";
       }
-      
       parent.addClass("clicked")
-      var score = $(this)[0].className.replace("star score-", "");
-
+      var score = $(this)[0].className.replace("sorting_1", "").replace("star score-", "").replace("clicked", "").replace(" ", "");
       $.ajax({
         type: "POST",
         url: "/add/rating",
-        data: {
+        data: JSON.stringify({
           "score": score,
-          "recipe": recipeId
-        },
-        success: function(){alert("rating lodged!")}
+          "recipe": recipeId,
+        }),
+        success: function(){alert("rating lodged!")},
+        contentType: "application/json",
+        dataType: 'json'
       });
       
       for (var i = 1; i <= score; i++) {

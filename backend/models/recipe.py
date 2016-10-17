@@ -32,6 +32,11 @@ class Recipe(BaseModel):
 			sql_command = "INSERT INTO Contains (recipe, ingredient, amount, unit) VALUES ('{}', '{}', '{}', '1')".format(recipe_id, ingredient[0], ingredient[1])
 			self.execute_sql(sql_command)
 
+	def get_all_recipes(self, userid):
+		sql = "SELECT Recipes.name, Recipes.id, ratings.rating FROM Recipes JOIN (SELECT * FROM Ratings WHERE userid='{}') as ratings ON ratings.recipe=recipes.id;".format(userid)
+		results = self.execute_sql_list(sql)
+
+		return results
 
 	def get_popular_recipes(self, num_results=20):
 		highest_rated = self.get_highest_rated()

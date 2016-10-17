@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from controllers.homepage_controller import HomePageController
 from controllers.recipe_controller import RecipeController
 from controllers.recipes_controller import RecipesController
+from controllers.rating_controller import RatingController
 from controllers.user_registration_controller import UserRegistrationController
 from controllers.login_controller import LoginController
 from controllers.dash_controller import DashController
@@ -23,6 +24,7 @@ def add_route(route_path, route_controller, methods, defaults={}):
   app.add_url_rule(route_path, view_func=user_view, methods=methods, defaults=defaults)
 
 add_route("/", HomePageController, ["GET"])
+add_route("/add/rating", RatingController, ["POST"])
 add_route("/recipe/<recipe_id>", RecipeController, ["GET"])
 add_route("/recipes", RecipesController, ["GET"])
 add_route("/new/recipe", RecipeController, ["GET", "POST"], defaults={"method": "new_recipe"})
