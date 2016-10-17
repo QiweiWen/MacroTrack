@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS= -O2 -Wall -c -std=gnu++11 -g3 -I ${PGDATA}/../include
-LDFLAGS = -lm -lpq
+LDFLAGS = -lm -lpq -L ${PGDATA}/../lib
 LD=$(CC)
 
 TARGET=mkres

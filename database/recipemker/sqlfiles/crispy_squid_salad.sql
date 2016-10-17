@@ -1,0 +1,11 @@
+insert into recipes ("id","name", "instruction_file") values (3, 'Crispy Squid Salad', 'Crispy Squid Salad.instr');
+insert into contains ("recipe", "ingredient", "amount") values (3,2369,0.800000);
+insert into contains ("recipe", "ingredient", "amount") values (3,1590,2.400000);
+insert into contains ("recipe", "ingredient", "amount") values (3,1502,1.200000);
+insert into contains ("recipe", "ingredient", "amount") values (3,3290,6.000000);
+insert into contains ("recipe", "ingredient", "amount") values (3,3046,0.250000);
+insert into contains ("recipe", "ingredient", "amount") values (3,3311,0.250000);
+insert into contains ("recipe", "ingredient", "amount") values (3,2361,0.350000);
+insert into contains ("recipe", "ingredient", "amount") values (3,1528,4.000000);
+insert into contains ("recipe", "ingredient", "amount") values (3,1528,3.000000);
+insert into contains ("recipe", "ingredient", "amount") values (3,1052,3.000000);

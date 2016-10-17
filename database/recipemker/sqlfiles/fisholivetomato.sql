@@ -1,0 +1,13 @@
+insert into recipes ("id","name", "instruction_file") values (12, 'Mediterranean Fish With Olives and Tomatoes', 'Mediterranean Fish With Olives and Tomatoes.instr');
+insert into contains ("recipe", "ingredient", "amount") values (12,3416,4.000000);
+insert into contains ("recipe", "ingredient", "amount") values (12,3317,0.010000);
+insert into contains ("recipe", "ingredient", "amount") values (12,2361,2.500000);
+insert into contains ("recipe", "ingredient", "amount") values (12,2765,7.000000);
+insert into contains ("recipe", "ingredient", "amount") values (12,580,0.500000);
+insert into contains ("recipe", "ingredient", "amount") values (12,1609,0.900000);
+insert into contains ("recipe", "ingredient", "amount") values (12,2413,0.500000);
+insert into contains ("recipe", "ingredient", "amount") values (12,119,0.050000);
+insert into contains ("recipe", "ingredient", "amount") values (12,2991,15.000000);
+insert into contains ("recipe", "ingredient", "amount") values (12,2374,1.200000);
+insert into contains ("recipe", "ingredient", "amount") values (12,3585,2.500000);
+insert into contains ("recipe", "ingredient", "amount") values (12,1968,0.500000);

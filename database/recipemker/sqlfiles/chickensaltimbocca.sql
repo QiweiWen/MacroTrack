@@ -1,0 +1,10 @@
+insert into recipes ("id","name", "instruction_file") values (14, 'Chicken Saltimbocca', 'Chicken Saltimbocca.instr');
+insert into contains ("recipe", "ingredient", "amount") values (14,929,6.000000);
+insert into contains ("recipe", "ingredient", "amount") values (14,2877,0.800000);
+insert into contains ("recipe", "ingredient", "amount") values (14,2361,0.150000);
+insert into contains ("recipe", "ingredient", "amount") values (14,736,0.400000);
+insert into contains ("recipe", "ingredient", "amount") values (14,3579,1.500000);
+insert into contains ("recipe", "ingredient", "amount") values (14,3297,1.000000);
+insert into contains ("recipe", "ingredient", "amount") values (14,1968,0.500000);
+insert into contains ("recipe", "ingredient", "amount") values (14,141,2.000000);
+insert into contains ("recipe", "ingredient", "amount") values (14,2310,0.300000);

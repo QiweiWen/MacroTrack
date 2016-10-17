@@ -1,0 +1,17 @@
+insert into recipes ("id","name", "instruction_file") values (8, 'Beef and Tomato Casserole with Herb Dumplings', 'Beef and Tomato Casserole with Herb Dumplings.instr');
+insert into contains ("recipe", "ingredient", "amount") values (8,210,10.000000);
+insert into contains ("recipe", "ingredient", "amount") values (8,1585,0.400000);
+insert into contains ("recipe", "ingredient", "amount") values (8,2977,0.100000);
+insert into contains ("recipe", "ingredient", "amount") values (8,2361,0.300000);
+insert into contains ("recipe", "ingredient", "amount") values (8,2377,1.200000);
+insert into contains ("recipe", "ingredient", "amount") values (8,1609,0.600000);
+insert into contains ("recipe", "ingredient", "amount") values (8,3411,0.200000);
+insert into contains ("recipe", "ingredient", "amount") values (8,3421,4.000000);
+insert into contains ("recipe", "ingredient", "amount") values (8,3297,3.500000);
+insert into contains ("recipe", "ingredient", "amount") values (8,528,1.000000);
+insert into contains ("recipe", "ingredient", "amount") values (8,1587,1.500000);
+insert into contains ("recipe", "ingredient", "amount") values (8,736,0.750000);
+insert into contains ("recipe", "ingredient", "amount") values (8,2412,0.100000);
+insert into contains ("recipe", "ingredient", "amount") values (8,2977,0.100000);
+insert into contains ("recipe", "ingredient", "amount") values (8,1502,0.600000);
+insert into contains ("recipe", "ingredient", "amount") values (8,2165,0.500000);

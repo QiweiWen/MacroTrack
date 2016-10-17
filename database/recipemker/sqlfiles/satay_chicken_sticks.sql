@@ -1,0 +1,17 @@
+insert into recipes ("id","name", "instruction_file") values (1, 'Satay Chicken Sticks', 'Satay Chicken Sticks.instr');
+insert into contains ("recipe", "ingredient", "amount") values (1,1968,0.100000);
+insert into contains ("recipe", "ingredient", "amount") values (1,1314,0.100000);
+insert into contains ("recipe", "ingredient", "amount") values (1,1238,0.200000);
+insert into contains ("recipe", "ingredient", "amount") values (1,3467,0.060000);
+insert into contains ("recipe", "ingredient", "amount") values (1,3313,0.120000);
+insert into contains ("recipe", "ingredient", "amount") values (1,2364,0.280000);
+insert into contains ("recipe", "ingredient", "amount") values (1,929,6.000000);
+insert into contains ("recipe", "ingredient", "amount") values (1,2329,1.500000);
+insert into contains ("recipe", "ingredient", "amount") values (1,3178,1.000000);
+insert into contains ("recipe", "ingredient", "amount") values (1,1609,0.500000);
+insert into contains ("recipe", "ingredient", "amount") values (1,1418,0.100000);
+insert into contains ("recipe", "ingredient", "amount") values (1,2364,0.200000);
+insert into contains ("recipe", "ingredient", "amount") values (1,3313,0.100000);
+insert into contains ("recipe", "ingredient", "amount") values (1,3365,0.200000);
+insert into contains ("recipe", "ingredient", "amount") values (1,2456,0.300000);
+insert into contains ("recipe", "ingredient", "amount") values (1,1096,2.700000);

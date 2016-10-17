@@ -1,0 +1,11 @@
+insert into recipes ("id","name", "instruction_file") values (4, 'Cheese Frittatta', 'instrfiles/4.instr');
+insert into contains ("recipe", "ingredient", "amount") values (4,2361,0.350000);
+insert into contains ("recipe", "ingredient", "amount") values (4,2377,1.200000);
+insert into contains ("recipe", "ingredient", "amount") values (4,1609,0.600000);
+insert into contains ("recipe", "ingredient", "amount") values (4,2165,3.800000);
+insert into contains ("recipe", "ingredient", "amount") values (4,1247,0.550000);
+insert into contains ("recipe", "ingredient", "amount") values (4,1502,3.000000);
+insert into contains ("recipe", "ingredient", "amount") values (4,840,1.500000);
+insert into contains ("recipe", "ingredient", "amount") values (4,3399,2.500000);
+insert into contains ("recipe", "ingredient", "amount") values (4,3686,3.000000);
+insert into contains ("recipe", "ingredient", "amount") values (4,2877,2.000000);

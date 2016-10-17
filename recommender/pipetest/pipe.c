@@ -52,7 +52,7 @@ int main (int argc,char** argv){
 				fprintf (stderr, "expecting uid iid rating\n");
 			
 			} 
-            m = UPDT_RATING(uid,iid,rting); 
+                        m = UPDT_RATING(uid,iid,rting); 
 		}else if (!strcmp (opcode, "swth")){
 			m = SWTCH_MDL;
 		}else if (!strcmp (opcode, "exit")){
@@ -76,7 +76,9 @@ int main (int argc,char** argv){
 		}	
 		recom_t* res = NULL;
         int num_items = 0;
-	    if (put_command (ctlfd, stafd, resfd, &m,&res, &num_items)) return -1;
+	    if (put_command (ctlfd, stafd, resfd, &m,&res, &num_items)) {
+                fprintf (stderr,"command failed\n");
+            }
         
         if (res)
             free (res); 

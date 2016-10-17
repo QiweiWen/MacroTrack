@@ -1,0 +1,11 @@
+insert into recipes ("id","name", "instruction_file") values (15, 'Thai Chicken and Asparagus Curry', 'Thai Chicken and Asparagus Curry.instr');
+insert into contains ("recipe", "ingredient", "amount") values (15,2361,0.300000);
+insert into contains ("recipe", "ingredient", "amount") values (15,935,7.000000);
+insert into contains ("recipe", "ingredient", "amount") values (15,2377,1.200000);
+insert into contains ("recipe", "ingredient", "amount") values (15,1608,0.600000);
+insert into contains ("recipe", "ingredient", "amount") values (15,2451,0.800000);
+insert into contains ("recipe", "ingredient", "amount") values (15,1098,3.000000);
+insert into contains ("recipe", "ingredient", "amount") values (15,3297,2.500000);
+insert into contains ("recipe", "ingredient", "amount") values (15,2548,0.150000);
+insert into contains ("recipe", "ingredient", "amount") values (15,53,1.000000);
+insert into contains ("recipe", "ingredient", "amount") values (15,3046,0.400000);
