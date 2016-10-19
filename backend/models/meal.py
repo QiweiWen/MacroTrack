@@ -32,3 +32,14 @@ class Meal(BaseModel):
       results["calories"] += ingredient[0] * 0.25 * ingredient[4]
 
     return results
+
+  def get_daily_meals(self, userid):
+    sql = [
+      "SELECT recipes.name, recipes.id, mealplan.mealcode FROM Recipes JOIN",
+      " (SELECT recipeid, mealcode FROM mealplan WHERE dateadded > now() - interval '1 day' AND userid='{}') ".format(userid),
+      "AS mealplan on mealplan.recipeid=recipes.id"
+    ]
+    sql = "".join(sql)
+    results = self.execute_sql_list(sql)
+
+    return results

@@ -6,24 +6,57 @@
       <span style="text-align:left; width: 100%;">
         <h3 width="100%; text-align: left;">Today</h3>
       </span>
-      {% for nutrient, amount in data.daily_goals.iteritems() %}
-        <h4>{{ nutrient }}</h4>
-        
-        <div class="progress progress-bar-sucess">
-          {% if amount > 200 %} 
-          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
-          {% elif amount > 110 %}
-          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-          {% elif amount > 80 and amount <= 110 %}
-          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-          {% else %}
-          <div class="progress-bar" role="progressbar" aria-valuenow="70"
-          {% endif %}
-          aria-valuemin="0" aria-valuemax="100" style="width:{{amount}}%">
-            <span class="sr-only">{{amount}}% Complete</span>
+      <div class="col-lg-7">
+        {% for nutrient, amount in data.daily_goals.iteritems() %}
+
+          <h4>{{ nutrient }}: {{amount|round}}%</h4>
+          
+          <div class="progress progress-bar-sucess">
+            {% if amount > 200 %} 
+            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
+            {% elif amount > 110 %}
+            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
+            {% elif amount > 80 and amount <= 110 %}
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+            {% else %}
+            <div class="progress-bar" role="progressbar" aria-valuenow="70"
+            {% endif %}
+            aria-valuemin="0" aria-valuemax="100" style="width:{{amount}}%; text-align: center;">
+              
+            </div>
           </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
+      <div class="col-lg-4" style="margin-top:30px;">
+        <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" style="color: #000;background-color:#fff;margin-top:20px;">
+          <thead style="background-color: #eee;">
+            <tr>
+              <th>Meal</th>
+              <th>Recipe</th>
+              <!-- <th>Rate It!</th> -->
+              <!-- <th>Add to Plan</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            {% for meal in data.meals %}
+              <tr>           
+                <td>{{ meal.mealtype }}</td>
+                <td><a href="/recipe/{{meal.recipe}}">{{ meal.name }}</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      $('#example').DataTable( {
+          "paging":   false,
+          "ordering": false,
+          "info":     false,
+          "searching":   false
+      });
+    } );
+  </script>
 {% endblock content %}
