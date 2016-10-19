@@ -46,7 +46,9 @@
                     <span class="star score-{{ n }}">★</span>
                   {% endfor %}
                 </td>
-                <td><a href="/add/meal/{{recipe.1}}">Add</a></td>
+                <td class="add-meal-btn recipe-{{recipe.1}}">
+                  <a href="#">Add</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -56,9 +58,22 @@
 
   <script>
 
-    for (ele in $("rating-container")) {
-
-    }
+    $(".add-meal-btn").click(function(){
+      var recipeId = $(this)[0].className.replace("add-meal-btn", "").replace(" ", "").replace("recipe-", "");
+      var mealType = prompt("Meal type? \n1: Breakfast\n2: Lunch\n3: Dinner");
+      $.ajax({
+        type: "POST",
+        url: "/add/meal",
+        data: JSON.stringify({
+          "recipe": recipeId,
+          "meal": mealType
+        }),
+        contentType: "application/json",
+        dataType: 'json',
+        error: function(){ alert("Failed!") },
+        success: function() { alert("Added!") }
+      })
+    });
 
     $(".star").click(function(){
       var parent = $($(this).parent());

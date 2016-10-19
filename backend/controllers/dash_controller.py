@@ -6,6 +6,7 @@ from flask_bcrypt import generate_password_hash
 from base_controller import BaseController
 
 from models.user import User
+from models.meal import Meal
 import config
 
 class DashController(BaseController):
@@ -15,19 +16,16 @@ class DashController(BaseController):
   def __init__(self):
     self.user = User()
 
-  class RegisterForm(Form):
-    """Register Form.
+  def get_daily_meal_nutrients(self):
+    user_goals = User().get_macro_tracking(request.user_id)
+    meal_nutrients = Meal().get_meal_nutrients(request.user_id)
+    user_macros = { x: float(meal_nutrients[x])/user_goals[x] * 100 for x in user_goals }
+    print user_macros, meal_nutrients
+    return user_macros
 
-    Helper class to wrap wtforms to handle user reg web form.
-    """
-
-    email = StringField('Email Address', [validators.Length(min=6, max=35)])
-    password = PasswordField('New Password', [validators.DataRequired()])
-
-  # @BaseController.requires_auth
   def get(self):
     data = {
-      "form": self.RegisterForm(),
-      "logged_in": True
+      "logged_in": True,
+      "daily_goals": self.get_daily_meal_nutrients()
     }
     return render_template("dash.html", data=data)

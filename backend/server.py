@@ -8,6 +8,7 @@ from controllers.rating_controller import RatingController
 from controllers.user_registration_controller import UserRegistrationController
 from controllers.login_controller import LoginController
 from controllers.dash_controller import DashController
+from controllers.meal_controller import MealController
 
 from models.user import User
 
@@ -25,13 +26,13 @@ def add_route(route_path, route_controller, methods, defaults={}):
 
 add_route("/", HomePageController, ["GET"])
 add_route("/add/rating", RatingController, ["POST"])
+add_route("/add/meal", MealController, ["POST"])
 add_route("/recipe/<recipe_id>", RecipeController, ["GET"])
 add_route("/recipes", RecipesController, ["GET"])
 add_route("/new/recipe", RecipeController, ["GET", "POST"], defaults={"method": "new_recipe"})
 add_route("/new/user", UserRegistrationController, ["GET"])
 add_route("/register", UserRegistrationController, ["POST"])
 add_route("/login", LoginController, ["GET", "POST"])
-# add_route("/login", LoginController, ["GET"])
 add_route("/dash", DashController, ["GET", "POST"])
 
 

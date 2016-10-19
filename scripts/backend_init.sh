@@ -1,6 +1,7 @@
 # This script is for OSX. Linux just use apt-get.
 # Install pip
 sudo easy_install pip
+sudo apt-get install pip
 
 # Install flask web framework.
 sudo pip install flask

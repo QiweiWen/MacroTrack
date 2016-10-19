@@ -1,8 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="row top-row">
-    <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2" style="text-align:center">
-      G'day cunt.
+    <div class="col-lg-10 col-lg-offset-1 col-md-8 col-md-offset-2" style="text-align:center">
+      <h2 width="100%">Dashboard</h2>
+      <span style="text-align:left; width: 100%;">
+        <h3 width="100%; text-align: left;">Today</h3>
+      </span>
+      {% for nutrient, amount in data.daily_goals.iteritems() %}
+        <h4>{{ nutrient }}</h4>
+        
+        <div class="progress progress-bar-sucess">
+          {% if amount > 200 %} 
+          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
+          {% elif amount > 110 %}
+          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
+          {% elif amount > 80 and amount <= 110 %}
+          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+          {% else %}
+          <div class="progress-bar" role="progressbar" aria-valuenow="70"
+          {% endif %}
+          aria-valuemin="0" aria-valuemax="100" style="width:{{amount}}%">
+            <span class="sr-only">{{amount}}% Complete</span>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 {% endblock content %}

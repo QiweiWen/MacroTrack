@@ -20,6 +20,11 @@ class UserRegistrationController(BaseController):
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
+    sex = StringField('Sex (M or F)', [validators.Length(min=1, max=1)])
+    height = StringField('Height (cm)', [validators.Length(min=1, max=3)])
+    weight = StringField('Weight (kg)', [validators.Length(min=1, max=3)])
+    age = StringField('Age', [validators.Length(min=1, max=3)])
+    exercise = StringField('Average Daily Movement: 1-4 (4 is the highest)', [validators.Length(min=1, max=3)])
     confirm = PasswordField('Repeat Password')
     accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
 
