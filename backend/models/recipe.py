@@ -33,10 +33,13 @@ class Recipe(BaseModel):
 			self.execute_sql(sql_command)
 
 	def get_all_recipes(self, userid):
-		sql = "SELECT name, id, 4 FROM recipes"#SELECT Recipes.name, Recipes.id, ratings.rating FROM Recipes JOIN (SELECT * FROM Ratings WHERE userid='{}') as ratings ON ratings.recipe=recipes.id;".format(userid)
-		results = self.execute_sql_list(sql)
+		sql = "SELECT Recipes.name, Recipes.id, 0 FROM Recipes"
+		recipes = self.execute_sql_list(sql)
+		sql = "SELECT recipe, rating FROM Ratings WHERE userid='{}'".format(userid)
+		ratings = self.execute_sql_list(sql)
 
-		return results
+
+		return recipes
 
 	def get_popular_recipes(self, num_results=20):
 		highest_rated = self.get_highest_rated()

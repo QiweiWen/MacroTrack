@@ -27,14 +27,14 @@
           </div>
         {% endfor %}
       </div>
-      <div class="col-lg-4" style="margin-top:30px;">
+
+
+      <div class="col-lg-5" style="margin-top:30px;">
         <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" style="color: #000;background-color:#fff;margin-top:20px;">
           <thead style="background-color: #eee;">
             <tr>
               <th>Meal</th>
               <th>Recipe</th>
-              <!-- <th>Rate It!</th> -->
-              <!-- <th>Add to Plan</th> -->
             </tr>
           </thead>
           <tbody>
@@ -47,11 +47,66 @@
           </tbody>
         </table>
       </div>
+
+      <div class="col-lg-6" style="margin-top:30px;">
+        <h3>Past Meals</h3>
+        <table id="history-table" class="table table-striped table-bordered" cellspacing="0" width="100%" style="color: #000;background-color:#fff;margin-top:20px;">
+          <thead style="background-color: #eee;">
+            <tr>
+              <th>Meal</th>
+              <th>Recipe</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for meal in data.meal_history %}
+              <tr>           
+                <td>{{ meal.mealtype }}</td>
+                <td><a href="/recipe/{{meal.recipeid}}">{{ meal.name }}</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-lg-6" style="margin-top:30px;">
+        <h3>Recommended Meals</h3>
+        <table id="recommend-table" class="table table-striped table-bordered" cellspacing="0" width="100%" style="color: #000;background-color:#fff;margin-top:20px;">
+          <thead style="background-color: #eee;">
+            <tr>
+              
+              <th>Recipe</th>
+              <th>Add Meal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for meal in data.meal_history %}
+              <tr>           
+                
+                <td><a href="/recipe/{{meal.recipeid}}">{{ meal.name }}</a></td>
+                <td><a href="/add/meal/{{meal.recipeid}}">Add</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
   <script>
     $(document).ready(function() {
       $('#example').DataTable( {
+          "paging":   false,
+          "ordering": false,
+          "info":     false,
+          "searching":   false
+      });
+      $('#history-table').DataTable( {
+          "paging":   false,
+          "ordering": false,
+          "info":     false,
+          "searching":   false
+      });
+      $('#recommend-table').DataTable( {
           "paging":   false,
           "ordering": false,
           "info":     false,

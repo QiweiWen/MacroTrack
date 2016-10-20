@@ -29,6 +29,23 @@ class DashController(BaseController):
     print user_macros, meal_nutrients
     return user_macros
 
+  def get_meal_history(self):
+    meals = Meal().get_all_past_meals(request.user_id)
+    results = []
+    meal_list = []
+    for meal in meals:
+      meal_list.append({
+        "name": meal[0],
+        "recipeid": meal[1],
+        "mealtype": meal[2],
+      })
+    for meal in meal_list:
+      meal["mealtype"] = self.meal_map[str(meal["mealtype"])]
+      results.append(meal)
+
+    return results
+
+
   def get_daily_meals(self):
     meals = Meal().get_daily_meals(request.user_id)
     meal_list = []
@@ -51,6 +68,7 @@ class DashController(BaseController):
     data = {
       "logged_in": True,
       "daily_goals": self.get_daily_meal_nutrients(),
-      "meals": self.get_daily_meals()
+      "meals": self.get_daily_meals(),
+      "meal_history": self.get_meal_history()
     }
     return render_template("dash.html", data=data)

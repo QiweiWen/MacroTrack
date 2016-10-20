@@ -41,7 +41,7 @@ class User(BaseModel, UserMixin):
       "calories": calories,
       "protein": protein_g,
       "fat": fat_g,
-      "sugar": 30
+      "sugar": 90
     }
 
 

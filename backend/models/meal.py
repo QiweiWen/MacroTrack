@@ -29,9 +29,21 @@ class Meal(BaseModel):
       results["sugar"] += ingredient[0] * 0.25 * ingredient[1]
       results["fat"] += ingredient[0] * 0.25 * ingredient[2]
       results["protein"] += ingredient[0] * 0.25 * ingredient[3]
-      results["calories"] += ingredient[0] * 0.25 * ingredient[4]
+      results["calories"] += ingredient[0] * 0.05 * ingredient[4]
 
     return results
+
+  def get_all_past_meals(self, userid):
+    sql = [
+      "SELECT recipes.name, recipes.id, mealplan.mealcode FROM Recipes JOIN",
+      " (SELECT recipeid, mealcode FROM mealplan WHERE dateadded < now() - interval '1 day' AND userid='{}' ORDER BY dateadded, mealcode) ".format(userid),
+      "AS mealplan on mealplan.recipeid=recipes.id"
+    ]
+    sql = "".join(sql)
+    results = self.execute_sql_list(sql)
+
+    return results
+
 
   def get_daily_meals(self, userid):
     sql = [
