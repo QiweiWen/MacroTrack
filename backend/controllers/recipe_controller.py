@@ -76,7 +76,8 @@ class RecipeController(BaseController):
     ingredients.append(self.get_ingredients_totals(ingredients))
 
     data = {
-      "ingredients": ingredients
+      "ingredients": ingredients,
+      "logged_in": self.request.user_id
     }
 
     return render_template("recipe.html", data=data)

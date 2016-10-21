@@ -33,11 +33,8 @@ class Recipe(BaseModel):
 			self.execute_sql(sql_command)
 
 	def get_all_recipes(self, userid):
-		sql = "SELECT Recipes.name, Recipes.id, 0 FROM Recipes"
+		sql = "SELECT recipes.name, recipes.id, COALESCE( NULLIF(ratings.rating,'0') , '0' ) FROM Recipes LEFT JOIN (SELECT recipe, rating FROM Ratings WHERE userid='{}') AS ratings ON ratings.recipe=recipes.id".format(userid)
 		recipes = self.execute_sql_list(sql)
-		sql = "SELECT recipe, rating FROM Ratings WHERE userid='{}'".format(userid)
-		ratings = self.execute_sql_list(sql)
-
 
 		return recipes
 

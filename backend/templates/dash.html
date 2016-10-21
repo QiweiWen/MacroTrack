@@ -41,7 +41,7 @@
             {% for meal in data.meals %}
               <tr>           
                 <td>{{ meal.mealtype }}</td>
-                <td><a href="/recipe/{{meal.recipe}}">{{ meal.name }}</a></td>
+                <td><a href="/recipe/{{meal.recipeid}}">{{ meal.name }}</a></td>
               </tr>
             {% endfor %}
           </tbody>

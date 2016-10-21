@@ -49,8 +49,14 @@
       var className = result[0].className.split(" ")[0];
       var ingredientId = className.replace("ingredient-id-", "");
       var amount = prompt("Amount (number of 100 grams)?");
-      $(".ingredients-list").append(ingredientName + "<br/>");
-      $("#ingredients").val($("#ingredients").val() + ingredientId + "-" + amount + ",")
+      $(".ingredients-list").append("<span>" + ingredientName + "<a class='remove-ingredient-" + ingredientId + "' href='#'> Remove</a></span><br/>");
+      $("#ingredients").val($("#ingredients").val() + ingredientId + "-" + amount + ",");
+      $(".remove-ingredient-" + ingredientId ).click(function(){
+        var ingredientId = $(this)[0].className.replace("remove-ingredient-", "");
+        console.log(ingredientId);
+        $(this).parent().remove();
+        $("#ingredients").val($("#ingredients").val().replace(new RegExp(ingredientId + "-\d+(\.\d{1,2})?,"), ""));
+      })
     } );
     $('#ingredients').val('');
     $("label[for='ingredients']").hide();
