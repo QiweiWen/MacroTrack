@@ -29,7 +29,7 @@ class Meal(BaseModel):
       results["sugar"] += ingredient[0] * 0.25 * ingredient[1]
       results["fat"] += ingredient[0] * 0.25 * ingredient[2]
       results["protein"] += ingredient[0] * 0.25 * ingredient[3]
-      results["calories"] += ingredient[0] * 0.05 * ingredient[4]
+      results["calories"] += ingredient[0] * (1/17.0) * ingredient[4]
 
     return results
 

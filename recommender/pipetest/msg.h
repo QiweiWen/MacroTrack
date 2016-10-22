@@ -23,6 +23,44 @@ typedef struct{
 	float rating;
 }recom_t;
 
+static inline void print_command (msg_t* msg){
+    switch (msg->opcode){
+        case RECOM_CODE:{
+            printf ("rec ");
+            break;
+        }
+        case UPDT_CODE:{
+            printf ("updt ");
+            break;
+        }
+        case SWTH_CODE:{
+            printf ("swth ");
+            break;
+        }
+        case EXT_CODE:{
+            printf ("exit ");
+            break;
+        }
+    }
+    for (int i = 0; i < msg->argnum; ++i){
+        if (i == 2){
+            printf ("%f ", msg->arg3);
+        }else if (i == 1){
+            printf ("%d ",msg->arg2);           
+        }else if (i == 0){
+            printf ("%d ", msg->arg1);
+        }
+    }
+    printf ("\n");
+}
+
+static inline void print_recresult (recom_t* ret, int num){
+    if (num < 0) return;
+    for (int i = 0; i < num; ++i){
+        printf ("%d, %f\n", ret[i].iid, ret[i].rating);
+    }
+}
+
 static inline int put_command 
 (FILE* ctl, FILE* sta, FILE* res,msg_t* msg, recom_t** ret, int* numitems)
 {
@@ -70,8 +108,8 @@ static inline int put_command
 			inarr[i++] = (recom_t){.iid = iid, .rating = rating};
             printf ("%ld, %f\n", iid, rating);
 		}
-		*ret = inarr;
-        *numitems = i; 
+		if (ret) *ret = inarr;
+                if (numitems) *numitems = i; 
 	}else if (msg->opcode == EXT_CODE){
         exit(0);
     }
