@@ -6,7 +6,7 @@ class Recipe(BaseModel):
 	# 	pass
 
 	def get_ingredients(self, recipe):
-		sql_command = "SELECT name, sugar, protein, fat from Ingredients JOIN (SELECT ingredient FROM Contains WHERE recipe='{}') AS recipe ON recipe.ingredient = ingredients.id".format(recipe)
+		sql_command = "SELECT name, sugar, protein, fat, amount from Ingredients JOIN (SELECT ingredient, amount FROM Contains WHERE recipe='{}') AS recipe ON recipe.ingredient = ingredients.id".format(recipe)
 		results = self.execute_sql_list(sql_command)
 		result_dict = []
 		for result in results:
@@ -15,6 +15,8 @@ class Recipe(BaseModel):
 				  "sugar": result[1],
 				  "protein": result[2],
 				  "fat": result[3],
+				  # In the DB, every amount is per 100g
+				  "amount": result[4] * 100,
 				})
 		return result_dict
 
@@ -38,9 +40,27 @@ class Recipe(BaseModel):
 
 		return recipes
 
+	def get_name(self, recipe_id):
+		sql = "SELECT name FROM recipes WHERE id='{}'".format(recipe_id)
+		result = self.execute_and_fetch_one(sql)
+
+		if result:
+			return result[0]
+		else:
+			return ""
+
 	def get_popular_recipes(self, num_results=20):
 		highest_rated = self.get_highest_rated()
 		return highest_rated
+
+	def list_from_ids(self, recipe_ids):
+		results = []
+		for recipe_id in recipe_ids:
+			sql = "SELECT name, id FROM Recipes WHERE id='{}'".format(recipe_id)
+			results.append(self.execute_and_fetch_one(sql))
+		print results
+		return results
+
 
 	def get_all_ingredients(self):
 		sql_command = "SELECT name, id FROM Ingredients"
@@ -54,15 +74,16 @@ class Recipe(BaseModel):
 		print results
 		return results
 
-	def get_highest_rated(self, num_results=20):
+	def get_highest_rated(self, num_results=6):
 		# TODO: Fill in connection to DB through base class.
 		sql_command = "SELECT name, id from RECIPES LEFT JOIN (SELECT ratings.recipe, AVG(ratings.rating) as AverageRating FROM Ratings LEFT JOIN Recipes ON ratings.recipe=recipes.id GROUP BY ratings.recipe) as Rankings ON Rankings.recipe = recipes.id LIMIT " + str(num_results)
 		results = self.execute_sql_list(sql_command)
-		result_dict = {}
+		
 		result_list = []
 		for result in results:
-			result_dict["recipe_name"] = result[0]
-			result_dict["recipe_id"] = result[1]
-			result_list.append(result_dict)
+			result_list.append({
+				"recipe_name": result[0],
+				"recipe_id": result[1]
+				})
 		print result_list
 		return result_list

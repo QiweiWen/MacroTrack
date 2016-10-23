@@ -1,29 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="row top-row">
-	  <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
-		<table class="table table-hover table-bordered">
-		  <thead>
+	  <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+	  <h3 style="text-align: center">{{ data.recipe_name }}</h3>
+		<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%" style="color: #000;background-color:#fff;">
+        <thead style="background-color: #eee;">
 		    <tr>
-		      <th>#</th>
 		      <th>Name</th>
-		      <th>Sugar</th>
-		      <th>Fat</th>
-		      <th>Protein</th>
+		      <th>Sugar (g)</th>
+		      <th>Fat (g)</th>
+		      <th>Protein (g)</th>
+		      <th>Amount (g)</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		      {% for ingredient in data.ingredients %}
 		      <tr>
-		      	<th scope="row">1</th>
 			    <td>{{ ingredient.name }}</td>
 			    <td>{{ ingredient.sugar }}</td>
 			    <td>{{ ingredient.fat }}</td>
 			    <td>{{ ingredient.protein }}</td>
+			    <td>{{ ingredient.amount }}</td>
 			</tr>
 			  {% endfor %}
 		  </tbody>
 		</table>
 	  </div>
   </div>
+
+  <script>
+  	$(document).ready(function() {
+	  	var table = $('#example').DataTable({
+	  		"paging":   false,
+        "info":     false,
+        "searching":   false,
+        "sorting": false
+	  	});
+	  });
+  </script>
 {% endblock content %}

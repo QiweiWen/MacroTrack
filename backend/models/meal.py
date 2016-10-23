@@ -5,6 +5,7 @@ import config, hashlib
 class Meal(BaseModel):
 
   def new_meal(self, author, recipe, meal_type):
+    self.remove_meal(author, None, mealcode=meal_type)
     sql_command = "INSERT INTO Mealplan (userid, recipeid, mealcode, dateadded) VALUES ('{}', '{}', '{}', (SELECT now FROM CURRENT_TIMESTAMP))".format(author, recipe, meal_type)
     print sql_command
     return self.execute_sql(sql_command)
@@ -42,6 +43,15 @@ class Meal(BaseModel):
     sql = "".join(sql)
     results = self.execute_sql_list(sql)
 
+    return results
+
+  def remove_meal(self, userid, recipeid, mealcode=None):
+    if mealcode:
+      sql = "DELETE FROM mealplan WHERE dateadded > now() - interval '1 day' AND userid='{}' AND mealcode='{}'".format(userid, mealcode)
+    else:
+      sql = "DELETE FROM mealplan WHERE dateadded > now() - interval '1 day' AND userid='{}' AND recipeid='{}'".format(userid, recipeid)
+
+    results = self.execute_sql(sql)
     return results
 
 

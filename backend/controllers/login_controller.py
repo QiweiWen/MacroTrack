@@ -23,6 +23,7 @@ class LoginController(BaseController):
     password = PasswordField('New Password', [validators.DataRequired()])
 
   def post(self):
+    # Check credentials
     form_data = request.form
     password = User.hash_password(form_data["password"])
     if self.user.is_valid_user(form_data["email"], password):

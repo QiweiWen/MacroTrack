@@ -5,9 +5,17 @@ from models.user import User
 import functools
 
 class BaseController(MethodView):
+  """Base Controller
+
+  Base class for all flask controller classes.
+  """
 
   @staticmethod
   def requires_auth(f):
+    """Requires auth
+
+    Wrapper funct to block any private routes from non-logged in users.
+    """
     @functools.wraps(f)
     def decorated(*args, **kwargs):
 

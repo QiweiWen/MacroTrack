@@ -27,9 +27,7 @@
         </div>
         <div class="navbar-collapse collapse" id="bs-navbar">
           <ul class="nav navbar-nav">
-            <li>
-              <a class="page-scroll" href="/">Home</a>
-            </li>
+            
             {% if data.logged_in %}
                 <li>
                   <a class="page-scroll" href="/recipes">Recipes</a>
@@ -44,6 +42,9 @@
                   <a class="page-scroll logout-btn" href="#">Logout</a>
                 </li>
               {% else %}
+                <li>
+                  <a class="page-scroll" href="/">Home</a>
+                </li>
                 <li>
                   <a class="page-scroll" href="/dash">Login</a>
                 </li>

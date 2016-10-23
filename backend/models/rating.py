@@ -1,4 +1,5 @@
 from base_model import BaseModel
+from recommender import Recommender
 
 from flask_user import UserMixin
 from flask_bcrypt import generate_password_hash, check_password_hash
@@ -14,4 +15,11 @@ class Rating(BaseModel, UserMixin):
       self.execute_sql(sql)
     sql = sql_command = "INSERT INTO Ratings (userid, recipe, rating) VALUES ('{}', '{}', '{}')".format(str(user), str(recipe), str(rating))
     self.execute_sql(sql) 
+
+    rec = Recommender()
+    rec.update_rating(user, recipe, rating)
+    rec.switch_model()
+
+
+
 

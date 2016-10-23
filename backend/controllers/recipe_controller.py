@@ -67,6 +67,7 @@ class RecipeController(BaseController):
     result = Recipe().new_recipe(name, ingredient_pairs, author)
     return redirect("/new/recipe", code=302)
 
+  @BaseController.requires_auth
   def get(self, recipe_id=None, method=None):
 
     if method == "new_recipe":
@@ -77,7 +78,8 @@ class RecipeController(BaseController):
 
     data = {
       "ingredients": ingredients,
-      "logged_in": self.request.user_id
+      "recipe_name": Recipe().get_name(recipe_id),
+      "logged_in": request.user_id
     }
 
     return render_template("recipe.html", data=data)

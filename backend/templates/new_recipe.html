@@ -55,7 +55,7 @@
         var ingredientId = $(this)[0].className.replace("remove-ingredient-", "");
         console.log(ingredientId);
         $(this).parent().remove();
-        $("#ingredients").val($("#ingredients").val().replace(new RegExp(ingredientId + "-\d+(\.\d{1,2})?,"), ""));
+        $("#ingredients").val($("#ingredients").val().replace(new RegExp(ingredientId + "-.*?,"), ""));
       })
     } );
     $('#ingredients').val('');

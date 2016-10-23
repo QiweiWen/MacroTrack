@@ -35,6 +35,7 @@
             <tr>
               <th>Meal</th>
               <th>Recipe</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -42,6 +43,7 @@
               <tr>           
                 <td>{{ meal.mealtype }}</td>
                 <td><a href="/recipe/{{meal.recipeid}}">{{ meal.name }}</a></td>
+                <td><a href="/dash?action=remove-meal&recipe={{meal.recipeid}}">Remove</a></td>
               </tr>
             {% endfor %}
           </tbody>
@@ -79,11 +81,13 @@
             </tr>
           </thead>
           <tbody>
-            {% for meal in data.meal_history %}
+            {% for meal in data.recommended_meals %}
               <tr>           
                 
-                <td><a href="/recipe/{{meal.recipeid}}">{{ meal.name }}</a></td>
-                <td><a href="/add/meal/{{meal.recipeid}}">Add</a></td>
+                <td><a href="/recipe/{{meal.1}}">{{ meal.0 }}</a></td>
+                 <td class="add-meal-btn recipe-{{meal.1}}">
+                  <a href="#">Add</a>
+                </td>
               </tr>
             {% endfor %}
           </tbody>
@@ -93,6 +97,24 @@
     </div>
   </div>
   <script>
+
+    $(".add-meal-btn").click(function(){
+      var recipeId = $(this)[0].className.replace("add-meal-btn", "").replace(" ", "").replace("recipe-", "");
+      var mealType = prompt("Meal type? \n1: Breakfast\n2: Lunch\n3: Dinner");
+      $.ajax({
+        type: "POST",
+        url: "/add/meal",
+        data: JSON.stringify({
+          "recipe": recipeId,
+          "meal": mealType
+        }),
+        contentType: "application/json",
+        dataType: 'json',
+        error: function(){ alert("Failed!") },
+        success: function() { alert("Added!"); window.location.href="/dash" }
+      })
+    });
+
     $(document).ready(function() {
       $('#example').DataTable( {
           "paging":   false,
