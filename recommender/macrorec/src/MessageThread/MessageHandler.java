@@ -7,6 +7,12 @@ import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import recommender.*;
 import java.util.*;
 
+//main message thread that handles communication with
+//the client program using three channels, implemented
+//as named pipes
+//control pipe: for queries
+//status pipe: for checking whether the last command succeeded
+//result pipe: for returning recommendation result
 public class MessageHandler implements Runnable {
 
 	public MessageHandler (String cmdpipe, String stpipe, 
@@ -31,23 +37,27 @@ public class MessageHandler implements Runnable {
 		stpipe.writeBytes(System.getProperty("line.separator"));
 	}
 	
-	private void give_recommendations (long user, int num) throws TasteException, IOException{
-		List <RecommendedItem> l = r.get_recommendations(user, num);
-		
-		if (l.size() == 0){
-			report_failure();
+	private void give_recommendations (long user, int num) throws IOException{
+		try{
+			List <RecommendedItem> l = r.get_recommendations(user, num);
+			if (l.size() == 0){
+				System.out.println("NO RECOMMENDATIONS");
+				report_failure();
+			}
+			
+			for (RecommendedItem i: l){
+				Long itemid = i.getItemID();
+				Float val = i.getValue();
+				System.out.println (i);
+				resultpipe.write((Long.toString(itemid)).getBytes());
+				resultpipe.write(",".getBytes());
+				resultpipe.write((Float.toString(val)).getBytes());
+				resultpipe.writeBytes(System.getProperty("line.separator"));
+			}
+			report_success();
+		}catch (TasteException t){
+			report_failure(); return;
 		}
-		
-		for (RecommendedItem i: l){
-			Long itemid = i.getItemID();
-			Float val = i.getValue();
-			System.out.println (i);
-			resultpipe.write((Long.toString(itemid)).getBytes());
-			resultpipe.write(",".getBytes());
-			resultpipe.write((Float.toString(val)).getBytes());
-			resultpipe.writeBytes(System.getProperty("line.separator"));
-		}
-		report_success();
 	}
 	
 	public void run() {
@@ -103,11 +113,7 @@ public class MessageHandler implements Runnable {
 			// TODO Auto-generated catch block
 			System.err.println("error reading from/writing to named pipe");
 			e.printStackTrace();
-		} catch (TasteException e) {
-			System.err.println("error while recommending item");
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 	}
 	public void join() throws InterruptedException{
 		if (t != null){

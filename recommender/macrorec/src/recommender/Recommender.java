@@ -2,6 +2,7 @@ package recommender;
 import java.io.*;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
@@ -23,22 +24,29 @@ public class Recommender {
 	 * Save updates to newmodelfile, build new model when asked
 	 */
 	public Recommender(String modelfile) throws IOException, TasteException{
-		model = new PlusAnonymousConcurrentUserDataModel(new FileDataModel (new File(modelfile)), max_newusers);
-		similarity = new PearsonCorrelationSimilarity(model);
-		neighbourhood = new ThresholdUserNeighborhood(0.1, similarity, model);
-		recommender = new GenericUserBasedRecommender(model, neighbourhood, similarity);
-		//build the list of users in the initial data model
-		LongPrimitiveIterator itr = model.getUserIDs();
-		oldmodelfile = modelfile;
+		try{
+			oldmodelfile = modelfile;
+			
+			model = new PlusAnonymousConcurrentUserDataModel(new FileDataModel (new File(modelfile)), max_newusers);
+			similarity = new PearsonCorrelationSimilarity(model);
+			neighbourhood = new ThresholdUserNeighborhood(0.1, similarity, model);
+			recommender = new GenericUserBasedRecommender(model, neighbourhood, similarity);
+			//build the list of users in the initial data model
+			LongPrimitiveIterator itr = model.getUserIDs();
+			
 
-		while (true){
-			try {
-				long uid = itr.nextLong();
-				knownusers.add(uid);
-			}catch (NoSuchElementException e){
-				break;
+			while (true){
+				try {
+					long uid = itr.nextLong();
+					knownusers.add(uid);
+				}catch (NoSuchElementException e){
+					break;
+				}
 			}
+		}catch (Exception te){
+			model_is_empty = true;
 		}
+		
 	}
 	
 	/*
@@ -62,7 +70,9 @@ public class Recommender {
 				//has this rating been updated since?
 				numpair <Long, Long> lp = new numpair <Long, Long> (uid, iid);
 				if (newratings.containsKey(lp)){
+					
 					String newline = String.format("%d,%d,%f",uid,iid, newratings.get(lp).floatValue());
+					newratings.remove(lp);
 					bw.write(newline);
 					bw.newLine();
 				}else{
@@ -71,18 +81,22 @@ public class Recommender {
 				}
 			}
 			br.close();
+			//write remaining entries into newmodelfile
+			Set<Entry<numpair<Long, Long>, Double>> remaining = newratings.entrySet();
+			for (Entry <numpair<Long,Long>, Double> e: remaining){
+				 long uid = e.getKey().a.longValue();
+				 long iid = e.getKey().b.longValue();
+				 Double rating = e.getValue();
+				 String newline = String.format("%d,%d,%f",uid,iid, rating.floatValue());
+				 bw.write(newline);
+				 bw.newLine();
+			}
 			/*
 			 * add the new users
 			 */
+			
 			for (Long uid : newusers){
-				TreeSet <Long> rated_items = newuserratings.get(uid);
-				for (Long rated: rated_items){
-					float rating = newratings.get(new numpair <Long,Long> (uid, rated))
-							.floatValue();
-					String newline = String.format("%d,%d,%f", uid, rated, rating);
-					bw.write(newline);
-					bw.newLine();
-				}
+
 				int pos = Collections.binarySearch(knownusers, uid);
 			    if (pos < 0) {
 			        knownusers.add(-pos-1, uid);
@@ -91,6 +105,7 @@ public class Recommender {
 			    	System.exit(1);
 			    }
 			}
+			
 			System.out.println (knownusers);
 			bw.close();
 			/*
@@ -103,14 +118,7 @@ public class Recommender {
 			newuserratings = new TreeMap <Long, TreeSet <Long>> ();
 			newratings = new TreeMap <numpair <Long, Long>, Double> ();
 			tmpmapping.clear();
-			/*for (RecommendedItem item : l){
-				System.out.println(item);
-			}
-			r.switch_model();
-			r.get_recommendations(5, 3);
-			for (RecommendedItem item : l){
-				System.out.println(item);
-			}
+			/*
 			 * rename the files
 			 * make the new model
 			 */
@@ -136,11 +144,12 @@ public class Recommender {
 	}
 	
 	
-	public void update_rating (long uid, long iid, double rating){
+	public void update_rating (long uid, long iid, double rating) throws IOException{
 		dirty = true;
-
+	
 		numpair <Long, Long> p = new numpair <Long, Long> (uid, iid);
 		newratings.put(p, rating);
+	
 		//can use binary search because knownusers was populated in order
 		if (java.util.Collections.binarySearch(knownusers,uid) < 0){
 			if (!newusers.contains(uid)){
@@ -156,12 +165,18 @@ public class Recommender {
 				l.add(iid);
 			}
 		}
+		if (model_is_empty){
+			model_is_empty = false;
+			switch_model();
+		}
 	
 	}
 	
 	public List <RecommendedItem> get_recommendations (long user, int num) throws TasteException, IOException{
 	
-	
+		 if (model_is_empty) {
+			 return new LinkedList <RecommendedItem> ();
+		 }
 		 if (newusers.contains(user) && !tmpmapping.containsKey(user)){
 			 Long tempUserId = model.takeAvailableUser();
 			
@@ -191,8 +206,6 @@ public class Recommender {
 				 res = recommender.recommend(tempUserId, num);
 				// System.out.println (res.size());
 			 }
-			 
-			// model.releaseUser(tempUserId);
 			
 			 return res;
 		 }else{
@@ -225,7 +238,7 @@ public class Recommender {
 	private UserBasedRecommender recommender;
 	private UserNeighborhood neighbourhood;
 	private boolean dirty = false;
-	
+	private boolean model_is_empty = false;
 	private String oldmodelfile;
 	private final String newmodelfile = "tmpfile";
 }

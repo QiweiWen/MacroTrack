@@ -1,11 +1,13 @@
 package MessageThread;
 
+
+//struct representing a command
 public class Operation {
 	public Command c;
 	public Long[] arg01 = new Long[2];
 	public Float arg2;
 	public int argnum = 0;
-	
+	//parse command from command pipe into an Operation object
 	public static Operation parse_operation (String s){
 		String [] stuff = s.split(",");
 		Operation n = new Operation();
