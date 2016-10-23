@@ -26,12 +26,13 @@ class Recipe(BaseModel):
 		return recipe_id
 
 	def new_recipe(self, name, ingredients, author):
-		sql_command = "INSERT INTO Recipes (name, author, instruction_file) VALUES ('{}', '{}', '')".format(name, str(author))
+		sql = "SELECT max(id) FROM Recipes"
+		recipe_id = int(self.execute_and_fetch_one(sql)[0]) + 1
+		sql_command = "INSERT INTO Recipes (id, name, author, instruction_file) VALUES ('{}','{}', '{}', '')".format(str(recipe_id), name, str(author))
 		self.execute_sql(sql_command)
-		recipe_id = self.get_id_from_name_and_author(name, author)
 		# self.execute_sql(sql_command)
 		for ingredient in ingredients:
-			sql_command = "INSERT INTO Contains (recipe, ingredient, amount, unit) VALUES ('{}', '{}', '{}', '1')".format(recipe_id, ingredient[0], ingredient[1])
+			sql_command = "INSERT INTO Contains (recipe, ingredient, amount) VALUES ('{}', '{}', '{}')".format(recipe_id, ingredient[0], ingredient[1])
 			self.execute_sql(sql_command)
 
 	def get_all_recipes(self, userid):
