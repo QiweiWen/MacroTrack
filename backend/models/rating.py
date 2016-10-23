@@ -16,6 +16,7 @@ class Rating(BaseModel, UserMixin):
     sql = sql_command = "INSERT INTO Ratings (userid, recipe, rating) VALUES ('{}', '{}', '{}')".format(str(user), str(recipe), str(rating))
     self.execute_sql(sql) 
 
+    # Update recommendations for user.
     rec = Recommender()
     rec.update_rating(user, recipe, rating)
     rec.switch_model()

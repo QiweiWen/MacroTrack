@@ -3,6 +3,10 @@ from base_model import BaseModel
 import config, hashlib
 
 class Meal(BaseModel):
+  """Meal
+
+  Model for the mealplan 'Meal'.
+  """
 
   def new_meal(self, author, recipe, meal_type):
     self.remove_meal(author, None, mealcode=meal_type)
