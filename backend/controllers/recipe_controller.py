@@ -7,6 +7,10 @@ from models.recipe import Recipe
 import config
 
 class RecipeController(BaseController):
+  """Recipe Controller
+
+  Class for a single recipe: creation (POST) and view (GET).
+  """
 
   class RecipeForm(Form):
     """Recipe Form.
