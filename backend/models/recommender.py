@@ -15,7 +15,10 @@ EXT_CODE=3
 
 
 class Recommender():
-  """Recommender"""
+  """Recommender
+
+  Class for interfacing with the java recommender process (using named pipes)
+  """
 
   class RecommenderResult:
 
