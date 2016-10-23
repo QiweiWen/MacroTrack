@@ -2,6 +2,10 @@ import psycopg2
 import getpass
 
 class BaseModel():
+	"""Base Model
+
+	Base Class for all models, helps connect to postgres db and make executes and fetches.
+	"""
 
 	def __init__(self):
 		

@@ -8,9 +8,15 @@ from models.user import User
 import config
 
 class UserRegistrationController(BaseController):
+  """User Registration Controller.
+
+  Class for new user signup.
+  """
 
   class FormData(dict):
-    """
+    """Form Data
+
+    Nescessary for WTForms Form constructor: getlist is needed.
     http://stackoverflow.com/questions/4534115/wtforms-doesnt-validate-no-errors/4773452#4773452
     """
     def getlist(self, key):
@@ -41,6 +47,7 @@ class UserRegistrationController(BaseController):
     accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
 
   def post(self):
+    # Attempt to validate user info.
     data = self.FormData(request.form)
     if not UserRegistrationController.RegisterForm(data).validate():
       form = UserRegistrationController.RegisterForm(data)
