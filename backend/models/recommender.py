@@ -15,6 +15,7 @@ EXT_CODE=3
 
 
 class Recommender():
+  """Recommender"""
 
   class RecommenderResult:
 
